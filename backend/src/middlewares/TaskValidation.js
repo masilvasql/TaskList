@@ -14,9 +14,11 @@ const TaskValidation = async (req, res, next) => {
     return res.status(400).json({ error: "description é obrigatório" });
   } else if (!when) {
     return res.status(400).json({ error: "when é obrigatório" });
-  } else if (isPast(new Date(when))) {
-    return res.status(400).json({ error: "Data não pode ser no passado" });
-  } else {
+  } // else if (isPast(new Date(when)))
+  // {
+  //   return res.status(400).json({ error: "Data não pode ser no passado" });
+  // }
+  else {
     let exists;
     if (req.params.id) {
       exists = await TaskModel

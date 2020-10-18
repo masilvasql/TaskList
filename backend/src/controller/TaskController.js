@@ -1,5 +1,9 @@
 const TaskModel = require("../model/TaskModel");
-const { response } = require("express");
+const { startOfDay, endOfDay } = require("date-fns");
+var format = require("date-fns/format");
+const current = new Date();
+
+console.log("CURRENT ", current);
 
 class TaskController {
   /**
@@ -87,6 +91,38 @@ class TaskController {
         res.status(200).json(response);
       })
       .catch((error) => {
+        res.status(500).json(error);
+      });
+  }
+
+  async late(req, res) {
+    await TaskModel
+      .find({
+        "when": { "$lt": current }, //$lt = menor que
+        "macaddress": { "$in": req.body.macaddress },
+      })
+      .sort("when")
+      .then((response) => {
+        res.status(200).json(response);
+      })
+      .catch((error) => {
+        console.log(error);
+        res.status(500).json(error);
+      });
+  }
+
+  async today(req, res) {
+    await TaskModel
+      .find({
+        "when": { "$gte": startOfDay(current), "$lt": endOfDay(current) }, //$gte => maior ou igual que
+        "macaddress": { "$in": req.body.macaddress },
+      })
+      .sort("when")
+      .then((response) => {
+        res.status(200).json(response);
+      })
+      .catch((error) => {
+        console.log(error);
         res.status(500).json(error);
       });
   }
