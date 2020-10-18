@@ -53,7 +53,7 @@ class TaskController {
 
   async all(req, res) {
     await TaskModel
-      .find({ macaddress: { "$in": req.body.macaddress } })
+      .find({ macaddress: { "$in": req.params.macaddress } })
       .sort("when")
       .then((response) => {
         return res.status(200).json(response);
@@ -106,7 +106,7 @@ class TaskController {
     await TaskModel
       .find({
         "when": { "$lt": current }, //$lt = menor que
-        "macaddress": { "$in": req.body.macaddress },
+        "macaddress": { "$in": req.params.macaddress },
       })
       .sort("when")
       .then((response) => {
@@ -122,7 +122,7 @@ class TaskController {
     await TaskModel
       .find({
         "when": { "$gte": startOfDay(current), "$lt": endOfDay(current) }, //$gte => maior ou igual que
-        "macaddress": { "$in": req.body.macaddress },
+        "macaddress": { "$in": req.params.macaddress },
       })
       .sort("when")
       .then((response) => {
@@ -138,7 +138,7 @@ class TaskController {
     await TaskModel
       .find({
         "when": { "$gte": startOfWeek(current), "$lt": endOfWeek(current) }, //$gte => maior ou igual que
-        "macaddress": { "$in": req.body.macaddress },
+        "macaddress": { "$in": req.params.macaddress },
       })
       .sort("when")
       .then((response) => {
@@ -154,7 +154,7 @@ class TaskController {
     await TaskModel
       .find({
         "when": { "$gte": startOfMonth(current), "$lt": endOfMonth(current) }, //$gte => maior ou igual que
-        "macaddress": { "$in": req.body.macaddress },
+        "macaddress": { "$in": req.params.macaddress },
       })
       .sort("when")
       .then((response) => {
@@ -170,7 +170,7 @@ class TaskController {
     await TaskModel
       .find({
         "when": { "$gte": startOfYear(current), "$lt": endOfYear(current) }, //$gte => maior ou igual que
-        "macaddress": { "$in": req.body.macaddress },
+        "macaddress": { "$in": req.params.macaddress },
       })
       .sort("when")
       .then((response) => {
