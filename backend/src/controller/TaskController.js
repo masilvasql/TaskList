@@ -1,9 +1,14 @@
 const TaskModel = require("../model/TaskModel");
-const { startOfDay, endOfDay } = require("date-fns");
-var format = require("date-fns/format");
-const current = new Date();
+const {
+  startOfDay,
+  endOfDay,
+  startOfWeek,
+  endOfWeek,
+  startOfMonth,
+  endOfMonth,
+} = require("date-fns");
 
-console.log("CURRENT ", current);
+const current = new Date();
 
 class TaskController {
   /**
@@ -115,6 +120,38 @@ class TaskController {
     await TaskModel
       .find({
         "when": { "$gte": startOfDay(current), "$lt": endOfDay(current) }, //$gte => maior ou igual que
+        "macaddress": { "$in": req.body.macaddress },
+      })
+      .sort("when")
+      .then((response) => {
+        res.status(200).json(response);
+      })
+      .catch((error) => {
+        console.log(error);
+        res.status(500).json(error);
+      });
+  }
+
+  async week(req, res) {
+    await TaskModel
+      .find({
+        "when": { "$gte": startOfWeek(current), "$lt": endOfWeek(current) }, //$gte => maior ou igual que
+        "macaddress": { "$in": req.body.macaddress },
+      })
+      .sort("when")
+      .then((response) => {
+        res.status(200).json(response);
+      })
+      .catch((error) => {
+        console.log(error);
+        res.status(500).json(error);
+      });
+  }
+
+  async month(req, res) {
+    await TaskModel
+      .find({
+        "when": { "$gte": startOfMonth(current), "$lt": endOfMonth(current) }, //$gte => maior ou igual que
         "macaddress": { "$in": req.body.macaddress },
       })
       .sort("when")

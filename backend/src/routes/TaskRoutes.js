@@ -9,7 +9,9 @@ router.put("/:id", TaskController.update);
 router.get("/filter/all", MacAddresValidation, TaskController.all);
 router.get("/:id", TaskController.show);
 router.get("/filter/late", MacAddresValidation, TaskController.late);
-router.get("/filter/today", MacAddresValidation, TaskController.late);
+router.get("/filter/today", MacAddresValidation, TaskController.today);
+router.get("/filter/week", MacAddresValidation, TaskController.week);
+router.get("/filter/month", MacAddresValidation, TaskController.month);
 router.delete("/:id", TaskController.delete);
 router.put("/:id/:done", TaskController.done);
 
