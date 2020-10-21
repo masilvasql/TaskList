@@ -1,6 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import * as S from "./style";
 
+//API
+import api from "../../services/api";
+
+//COMPONENTES
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 import FilterCard from "../../components/FilterCard";
@@ -8,6 +12,21 @@ import TaskCard from "../../components/TaskCard";
 
 function Home() {
   const [filterActived, setFilterActived] = useState("today");
+  const [tasks, setTasks] = useState([]);
+
+  async function loadTasks() {
+    await api.get(`/task/filter/${filterActived}/00:1D:7D:B2:34:53`)
+      .then((resp) => {
+        setTasks(resp.data);
+      }).catch((error) => {
+      });
+  }
+
+  useEffect(() => {
+    loadTasks();
+  }, [filterActived]);
+  //se colocar no colchetes o parametro, chama a
+  //função e carrega todas as tarefas com o estado padrão e toda a vez que o estado mudar
 
   return (
     <S.Container>
@@ -50,17 +69,13 @@ function Home() {
       </S.Title>
 
       <S.Content>
-        <TaskCard />
-        <TaskCard />
-        <TaskCard />
-        <TaskCard />
-        <TaskCard />
-        <TaskCard />
-        <TaskCard />
-        <TaskCard />
-        <TaskCard />
-        <TaskCard />
-        <TaskCard />
+        {tasks.map((task) => (
+          <TaskCard
+            type={task.type}
+            title={task.title}
+            when={task.when}
+          />
+        ))}
       </S.Content>
 
       <Footer />

@@ -1,6 +1,8 @@
 const express = require("express");
 const server = express();
+const cors = require("cors");
 server.use(express.json()); //no lugar do body Parser
+server.use(cors());
 
 const TaskRoutes = require("./routes/TaskRoutes");
 
