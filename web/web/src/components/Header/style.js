@@ -30,16 +30,24 @@ export const RightSide = styled.div`
     align-items:center;
     justify-content:flex-end;
 
-    a{
+    a, button{
         color:#fff;
         font-weight:bold;
         text-decoration:none;
         margin: 0 10px;
-        
+    
+    
+
         &:hover{
             color:#EE6B26
         }
     }
+
+    button{
+            background:none;
+            border:none;
+            cursor:pointer
+        }
 
     #notification{
        img{

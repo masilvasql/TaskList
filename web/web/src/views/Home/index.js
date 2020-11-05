@@ -13,24 +13,38 @@ import TaskCard from "../../components/TaskCard";
 function Home() {
   const [filterActived, setFilterActived] = useState("today");
   const [tasks, setTasks] = useState([]);
+  const [lateCount, setLateCount] = useState()
 
   async function loadTasks() {
-    await api.get(`/task/filter/${filterActived}/00:1D:7D:B2:34:53`)
+    await api.get(`/task/filter/${filterActived}/06-00-00-00-00-00`)
       .then((resp) => {
         setTasks(resp.data);
       }).catch((error) => {
       });
   }
 
+  async function lateVerify() {
+    await api.get(`/task/filter/late/06-00-00-00-00-00`)
+      .then((resp) => {
+        setLateCount(resp.data.length)
+      }).catch((error) => {
+      });
+  }
+
+  function notification() {
+    setFilterActived('late')
+  }
+
   useEffect(() => {
     loadTasks();
+    lateVerify()
   }, [filterActived]);
   //se colocar no colchetes o parametro, chama a
   //função e carrega todas as tarefas com o estado padrão e toda a vez que o estado mudar
 
   return (
     <S.Container>
-      <Header />
+      <Header lateCount={lateCount} clickNotification={notification} />
       <S.FilterArea>
         <button type="button" onClick={() => setFilterActived("all")}>
           <FilterCard
@@ -65,7 +79,7 @@ function Home() {
       </S.FilterArea>
 
       <S.Title>
-        <h3>TAREFAS</h3>
+        <h3>TAREFAS {filterActived === 'late' ? 'ATRASADAS' : ''}</h3>
       </S.Title>
 
       <S.Content>
