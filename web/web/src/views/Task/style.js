@@ -55,6 +55,7 @@ export const Input = styled.div `
     span{
         color:#707070;
         margin-top:5px 0 ;
+        font-weight:bold;
     }
 
     input{
@@ -87,6 +88,7 @@ export const TextArea = styled.div`
     span{
         color:#707070;
         margin-top:5px 0 ;
+        font-weight:bold;
     }
 
     textarea {
