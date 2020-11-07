@@ -64,12 +64,16 @@ function Task({ match }) {
   }
 
   async function Delete() {
-    await api.delete(`/task/${match.params.id}`)
-      .then((resp) => {
-        setRedirect(true);
-      }).catch((err) => {
-        alert("Ocorreu um erro ao deletar a tarefa " + err);
-      });
+    const confirm = window.confirm("Deseja Realmente Remover esta tarefa ?");
+
+    if (confirm) {
+      await api.delete(`/task/${match.params.id}`)
+        .then((resp) => {
+          setRedirect(true);
+        }).catch((err) => {
+          alert("Ocorreu um erro ao deletar a tarefa " + err);
+        });
+    }
   }
 
   async function Save() {
@@ -180,7 +184,8 @@ function Task({ match }) {
             />
             <span>CONCLUÍDO</span>
           </div>
-          <button type="button" onClick={Delete}>EXCLUIR</button>
+          {match.params.id &&
+            <button type="button" onClick={Delete}>EXCLUIR</button>}
         </S.Options>
 
         <S.Save>
