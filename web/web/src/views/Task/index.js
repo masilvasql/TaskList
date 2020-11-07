@@ -17,7 +17,7 @@ import iconClock from "../../assets/hour.png";
 //match => são os parâmetros que vem por url
 function Task({ match }) {
   const [redirect, setRedirect] = useState(false);
-  const [lateCount, setLateCount] = useState();
+
   const [type, setType] = useState();
   const [id, setId] = useState();
   const [done, setDone] = useState(false);
@@ -26,14 +26,6 @@ function Task({ match }) {
   const [date, setDate] = useState();
   const [hour, setHour] = useState();
   const [macaddress, setMacaddres] = useState("00:1D:7D:B2:34:19");
-
-  async function lateVerify() {
-    await api.get(`/task/filter/late/00:1D:7D:B2:34:19`)
-      .then((resp) => {
-        setLateCount(resp.data.length);
-      }).catch((error) => {
-      });
-  }
 
   async function LoadTaskDetail() {
     await api.get(`/task/${match.params.id}`)
@@ -108,7 +100,6 @@ function Task({ match }) {
   }
 
   useEffect(() => {
-    lateVerify();
     if (match.params.id) {
       LoadTaskDetail();
     }
@@ -119,7 +110,7 @@ function Task({ match }) {
   return (
     <S.Container>
       {redirect && <Redirect to="/" />}
-      <Header lateCount={lateCount} />
+      <Header />
 
       <S.Form>
         <S.TypeIcons>
