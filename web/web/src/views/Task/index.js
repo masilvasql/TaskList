@@ -14,6 +14,8 @@ import typeIcons from "../../utils/typeIcons";
 import iconCalendar from "../../assets/calendar.png";
 import iconClock from "../../assets/hour.png";
 
+import isConnected from "../../utils/isConnected";
+
 //match => são os parâmetros que vem por url
 function Task({ match }) {
   const [redirect, setRedirect] = useState(false);
@@ -25,7 +27,7 @@ function Task({ match }) {
   const [description, setDescription] = useState();
   const [date, setDate] = useState();
   const [hour, setHour] = useState();
-  const [macaddress, setMacaddres] = useState("00:1D:7D:B2:34:19");
+  const [macaddress, setMacaddres] = useState(isConnected);
 
   async function LoadTaskDetail() {
     await api.get(`/task/${match.params.id}`)
@@ -73,11 +75,11 @@ function Task({ match }) {
       if (match.params.id) {
         await api.put(`/task/${match.params.id}`, {
           done,
-          macaddress,
+          macaddress: isConnected,
           type,
           title,
           description,
-          when: `${date}T${hour}:00.000Z`,
+          when: `${date}T${hour}:00.000`,
         })
           .then((resp) => {
             setRedirect(true);
@@ -85,11 +87,11 @@ function Task({ match }) {
           });
       } else {
         await api.post(`/task`, {
-          macaddress,
+          macaddress: isConnected,
           type,
           title,
           description,
-          when: `${date}T${hour}:00.000Z`,
+          when: `${date}T${hour}:00.000`,
         })
           .then((resp) => {
             setRedirect(true);

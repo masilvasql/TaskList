@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
+import isConnected from "../../utils/isConnected";
 
 import * as S from "./style";
 
@@ -15,9 +16,10 @@ import TaskCard from "../../components/TaskCard";
 function Home() {
   const [filterActived, setFilterActived] = useState("today");
   const [tasks, setTasks] = useState([]);
+  const [redirect, setRedirect] = useState(false);
 
   async function loadTasks() {
-    await api.get(`/task/filter/${filterActived}/00:1D:7D:B2:34:19`)
+    await api.get(`/task/filter/${filterActived}/${isConnected}`)
       .then((resp) => {
         setTasks(resp.data);
       }).catch((error) => {
@@ -29,6 +31,9 @@ function Home() {
   }
 
   useEffect(() => {
+    if (!isConnected) {
+      setRedirect(true);
+    }
     loadTasks();
   }, [filterActived]);
   //se colocar no colchetes o parametro, chama a
@@ -36,6 +41,7 @@ function Home() {
 
   return (
     <S.Container>
+      {redirect && <Redirect to="qrcode" />}
       <Header clickNotification={notification} />
       <S.FilterArea>
         <button type="button" onClick={() => setFilterActived("all")}>

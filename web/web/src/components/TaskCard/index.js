@@ -1,5 +1,6 @@
 import React, { useMemo } from "react";
 import { format } from "date-fns";
+
 import * as S from "./style";
 import typeIcons from "../../utils/typeIcons";
 

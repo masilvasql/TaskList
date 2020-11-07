@@ -4,35 +4,53 @@ import logo from "../../assets/logo.png";
 import bell from "../../assets/bell.png";
 import { Link } from "react-router-dom";
 import api from "../../services/api";
+import isConnected from "../../utils/isConnected";
+import { Redirect } from "react-router-dom";
 
 function Header({ clickNotification }) {
   const [lateCount, setLateCount] = useState();
+  const [redirect, setRedirect] = useState(false);
 
   async function lateVerify() {
-    await api.get(`/task/filter/late/00:1D:7D:B2:34:19`)
+    await api.get(`/task/filter/late/${isConnected}`)
       .then((resp) => {
         setLateCount(resp.data.length);
       }).catch((error) => {
       });
   }
 
+  async function Logout() {
+    localStorage.removeItem("@todo/macaddress");
+    window.location.reload();
+  }
+
   useEffect(() => {
+    if (!isConnected) {
+      setRedirect(true);
+    }
     lateVerify();
   }, []);
 
   return (
     <S.Container>
+      {redirect && <Redirect to="/qrcode" />}
       <S.LeftSide>
         <img src={logo} alt="Logo"></img>
       </S.LeftSide>
 
       <S.RightSide>
-        <Link to="/">INÍCIO</Link>
-        <span className="divider" />
-        <Link to="/task">NOVA TAREFA</Link>
-        <span className="divider" />
-        <Link to="/qrcode">SINCRONIZAR CELULAR</Link>
-        {lateCount &&
+        {!redirect &&
+          <>
+            <Link to="/">INÍCIO</Link>
+            <span className="divider" />
+            <Link to="/task">NOVA TAREFA</Link>
+            <span className="divider" />
+          </>}
+        {!isConnected
+          ? <Link to="/qrcode">SINCRONIZAR CELULAR</Link>
+          : <button type="button" onClick={Logout}>SAIR</button>}
+
+        {lateCount > 0 && !redirect &&
           <>
             <span className="divider" />
             <button onClick={clickNotification} id="notification">
