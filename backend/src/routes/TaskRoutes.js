@@ -7,7 +7,7 @@ const MacAddresValidation = require("../middlewares/MacAddressValidation");
 router.post("/", TaskValidation, TaskController.create);
 router.put("/:id", TaskController.update);
 router.get("/filter/all/:macaddress", TaskController.all);
-router.get("/:id/:macaddress", TaskController.show);
+router.get("/:id/", TaskController.show);
 router.get("/filter/late/:macaddress", TaskController.late);
 router.get("/filter/today/:macaddress", TaskController.today);
 router.get("/filter/week/:macaddress", TaskController.week);

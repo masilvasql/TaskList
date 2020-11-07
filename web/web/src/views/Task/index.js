@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import { format } from "date-fns";
+
 import * as S from "./style";
 
 //API
@@ -11,7 +13,8 @@ import typeIcons from "../../utils/typeIcons";
 import iconCalendar from "../../assets/calendar.png";
 import iconClock from "../../assets/hour.png";
 
-function Task() {
+//match => são os parâmetros que vem por url
+function Task({ match }) {
   const [lateCount, setLateCount] = useState();
   const [type, setType] = useState();
   const [id, setId] = useState();
@@ -27,6 +30,17 @@ function Task() {
       .then((resp) => {
         setLateCount(resp.data.length);
       }).catch((error) => {
+      });
+  }
+
+  async function LoadTaskDetail() {
+    await api.get(`/task/${match.params.id}`)
+      .then((resp) => {
+        setType(resp.data.type);
+        setTitle(resp.data.title);
+        setDescription(resp.data.description);
+        setDate(format(new Date(resp.data.when), "yyyy-MM-dd"));
+        setHour(format(new Date(resp.data.when), "HH:mm"));
       });
   }
 
@@ -46,6 +60,7 @@ function Task() {
 
   useEffect(() => {
     lateVerify();
+    LoadTaskDetail();
   }, []);
   //se colocar no colchetes o parametro, chama a
   //função e carrega todas as tarefas com o estado padrão e toda a vez que o estado mudar
