@@ -63,6 +63,15 @@ function Task({ match }) {
     }
   }
 
+  async function Delete() {
+    await api.delete(`/task/${match.params.id}`)
+      .then((resp) => {
+        setRedirect(true);
+      }).catch((err) => {
+        alert("Ocorreu um erro ao deletar a tarefa " + err);
+      });
+  }
+
   async function Save() {
     if (validaCampos()) {
       if (match.params.id) {
@@ -171,7 +180,7 @@ function Task({ match }) {
             />
             <span>CONCLUÍDO</span>
           </div>
-          <button type="button">EXCLUIR</button>
+          <button type="button" onClick={Delete}>EXCLUIR</button>
         </S.Options>
 
         <S.Save>
