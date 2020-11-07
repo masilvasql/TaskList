@@ -13,12 +13,13 @@ export const Form = styled.div`
     margin-bottom:70px;
    
 
-`
+`;
 
 export const TypeIcons = styled.div`
     width:100%;
     display:flex;
     justify-content:center;
+    flex-wrap:wrap;
 
     .inative{
         opacity:0.5
@@ -44,9 +45,9 @@ export const TypeIcons = styled.div`
             opacity:0.5;
         }
     }
-`
+`;
 
-export const Input = styled.div `
+export const Input = styled.div`
     width:100%;
     display:flex;
     flex-direction:column;
@@ -77,7 +78,7 @@ export const Input = styled.div `
         position:relative;
         left:96.5%;
     }
-`
+`;
 
 export const TextArea = styled.div`
     width:100%;
@@ -105,7 +106,7 @@ export const TextArea = styled.div`
     }
 
 
-`
+`;
 
 export const Options = styled.div`
     display:flex;
@@ -135,7 +136,7 @@ export const Options = styled.div`
             margin-left:5px;
         }
     }
-`
+`;
 
 export const Save = styled.div`
     width:100%;
@@ -156,4 +157,4 @@ export const Save = styled.div`
             opacity:0.7
         }
     }
-`
+`;
