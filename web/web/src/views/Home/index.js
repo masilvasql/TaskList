@@ -91,6 +91,7 @@ function Home() {
               type={task.type}
               title={task.title}
               when={task.when}
+              done={task.done}
             />
           </Link>
         ))}

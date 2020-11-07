@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { format } from "date-fns";
+import { Redirect } from "react-router-dom";
 
 import * as S from "./style";
 
@@ -15,6 +16,7 @@ import iconClock from "../../assets/hour.png";
 
 //match => são os parâmetros que vem por url
 function Task({ match }) {
+  const [redirect, setRedirect] = useState(false);
   const [lateCount, setLateCount] = useState();
   const [type, setType] = useState();
   const [id, setId] = useState();
@@ -41,32 +43,69 @@ function Task({ match }) {
         setDescription(resp.data.description);
         setDate(format(new Date(resp.data.when), "yyyy-MM-dd"));
         setHour(format(new Date(resp.data.when), "HH:mm"));
+        setDone(resp.data.done);
       });
   }
 
+  function validaCampos() {
+    if (!title) {
+      return alert("Favor preencher o título!");
+    } else if (!description) {
+      return alert("Favor preencher a descrição!");
+    } else if (!date) {
+      return alert("Favor preencher o Data!");
+    } else if (!hour) {
+      return alert("Favor preencher o Hora!");
+    } else if (!type) {
+      return alert("O Tipo da Tarefa é obrigatório");
+    } else {
+      return true;
+    }
+  }
+
   async function Save() {
-    await api.post(`/task`, {
-      macaddress,
-      type,
-      title,
-      description,
-      when: `${date}T${hour}:00.000Z`,
-    })
-      .then((resp) => {
-        alert("TAREFA CADASTRADA COM SUCESSO!");
-      }).catch((error) => {
-      });
+    if (validaCampos()) {
+      if (match.params.id) {
+        await api.put(`/task/${match.params.id}`, {
+          done,
+          macaddress,
+          type,
+          title,
+          description,
+          when: `${date}T${hour}:00.000Z`,
+        })
+          .then((resp) => {
+            setRedirect(true);
+          }).catch((error) => {
+          });
+      } else {
+        await api.post(`/task`, {
+          macaddress,
+          type,
+          title,
+          description,
+          when: `${date}T${hour}:00.000Z`,
+        })
+          .then((resp) => {
+            setRedirect(true);
+          }).catch((error) => {
+          });
+      }
+    }
   }
 
   useEffect(() => {
     lateVerify();
-    LoadTaskDetail();
+    if (match.params.id) {
+      LoadTaskDetail();
+    }
   }, []);
   //se colocar no colchetes o parametro, chama a
   //função e carrega todas as tarefas com o estado padrão e toda a vez que o estado mudar
 
   return (
     <S.Container>
+      {redirect && <Redirect to="/" />}
       <Header lateCount={lateCount} />
 
       <S.Form>

@@ -12,6 +12,8 @@ export const Container = styled.div`
     flex-direction:column ;
     margin:15px;
 
+    opacity: ${(props) => props.done ? 0.5 : 1};
+
     &:hover{
         opacity:0.5;
         cursor: pointer;
